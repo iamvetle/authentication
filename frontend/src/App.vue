@@ -26,11 +26,12 @@ export default {
   methods: {
     async login() {
         const data = {
-            "username": this.username,
-            "password": this.password
+            username: this.username,
+            password: this.password
         };
       try {
-        response = await axios.post(this.authurl, data)
+        await axios.post(this.authurl, data)
+        .then((response) => {
           console.log("Post request successfull", response.data)
           const token = response.data.token
           console.log(`Authentication token: ${token}`)
@@ -39,10 +40,12 @@ export default {
           this.username = ""
           this.password = ""
           // redirect to user home page 
-        } catch(error) {
-            console.error("An error occour while trying to log in", error)
-            this.username = "failed"
-            this.password = "failed"
+        })
+        .catch((error) => {
+          console.error("Post request usuccessfull", error)
+        })
+    } catch(error) {
+        console.error("An error occour while trying to log in")
         // return login failed or something
       } 
     },
