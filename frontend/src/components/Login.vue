@@ -16,8 +16,6 @@
     <script>
     
     import axios from 'axios';
-
-    import { mapState } from 'vuex' 
     
     export default {
       data() {
@@ -26,11 +24,9 @@
           password:"",
           authurl: "http://localhost:8888/api-token-auth/",
           loginerror:false,
-          loginsucess:false
+          loginsucess:false,
+          token: null
         }
-      },
-      computed: {
-        ...mapState(["authenticated"])
       },
       methods: {
         async login() {
@@ -43,14 +39,17 @@
               const token = response.data.token
               console.log(`Authentication token: ${token}`)
               localStorage.setItem("token", token)
+              this.token  = token
 
-              this.$store.commit("tokenChange", localStorage.getItem("token"))
-              this.$store.commit("authenticate", true)
+              localStorage.setItem("username", response.data.username)
+              
               
               this.username = ""
               this.password = ""
               this.loginerror = false
               this.loginsucess = true
+
+              this.$router.replace("/")
               // redirect to user home page 
         } catch(error) {
             console.error("An error occour while trying to log in")
@@ -58,11 +57,12 @@
             // return login failed or something
           } 
         },
-        logout() {
-            localStorage.removeItem("token");
-            console.log("You are logged out: token removed")
+        created () {
+          if (localStorage.getItem("token") !== null) {
+            this.$router.replace("/")
+          }
         }
-    }
+  }
     }
     
     </script>
