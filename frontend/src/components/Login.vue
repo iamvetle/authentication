@@ -15,7 +15,9 @@
     
     <script>
     
-    import axios from 'axios'
+    import axios from 'axios';
+
+    import { mapState } from 'vuex' 
     
     export default {
       data() {
@@ -26,6 +28,9 @@
           loginerror:false,
           loginsucess:false
         }
+      },
+      computed: {
+        ...mapState(["authenticated"])
       },
       methods: {
         async login() {
@@ -38,6 +43,9 @@
               const token = response.data.token
               console.log(`Authentication token: ${token}`)
               localStorage.setItem("token", token)
+
+              this.$store.commit("tokenChange", localStorage.getItem("token"))
+              this.$store.commit("authenticate", true)
               
               this.username = ""
               this.password = ""

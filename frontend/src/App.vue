@@ -1,18 +1,23 @@
 <template>
 
-<h1>This is App.vue</h1>
+<div id="routerView">
 
-<router-link to="/home">Home</router-link>
-<router-link to="/login">Login</router-link>
+    <router-view></router-view>
 
-<router-view />
+</div>
+
+
 
 </template>
 
 <script>
 
-export default {
 
+export default {
+    data() {
+        return {
+        }
+    }
 }
 </script>
 
