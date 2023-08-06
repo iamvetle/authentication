@@ -56,13 +56,13 @@
             this.loginerror = true
             // return login failed or something
           } 
-        },
-        created () {
+        }
+          },
+          created () {
           if (localStorage.getItem("token") !== null) {
             this.$router.replace("/")
-          }
         }
-  }
+      }
     }
     
     </script>
