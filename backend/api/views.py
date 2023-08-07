@@ -26,11 +26,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 import json
 from .models import CustomUser
+from rest_framework import status
 
-@csrf_exempt
-def RegisterUser(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
+class RegisterUserView(APIView):
+    def post(self, request, *args, **kwargs):
+        data = request.data
         try:
             CustomUser.objects.create_user(
                 email=data['email'], 
@@ -39,6 +39,6 @@ def RegisterUser(request):
                 phone=data['phone'], 
                 password=data['password']
             )
-            return JsonResponse({"message": "User created successfully."}, status=201)
-        except IntegrityError:
-            return JsonResponse({"error": "A user with this email already exists."}, status=400)
+            return Response({"message": "User created successfully."}, status=status.HTTP_201_CREATED)
+        except IntegrityError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
