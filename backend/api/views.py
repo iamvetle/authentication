@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
-class CurrentUserView(APIView):
+class CurrentUserView(APIView): # Function
     permission_classes = [IsAuthenticated] # Checks whether the the token is authenticated/valid
 
     def get(self, request): # Takes the token and returns the corresponding user information

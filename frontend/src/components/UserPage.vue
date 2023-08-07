@@ -7,11 +7,11 @@
     </div>
     <h1 class="mt-14 text-3xl text-center">Hello </h1>
     <p class="mt-6 text-center text-lg">Information about you</p>
-    <p class="py-2 text-center">First name: _</p>
-    <p class="py-2 text-center">Last name: _</p>
-    <p class="py-2 text-center">username: _</p>
-    <p class="py-2 text-center">email: _</p>
-    <p class="py-2 text-center">***: _</p>
+    <p class="py-2 text-center">First name: {{ first_name }}</p>
+    <p class="py-2 text-center">Last name: {{ last_name }}</p>
+    <p class="py-2 text-center">username: {{ username }}</p>
+    <p class="py-2 text-center">email: {{ email }}</p>
+    <p class="py-2 text-center">***: and so on</p>
 
 
 </div>
@@ -38,7 +38,11 @@ import axios from 'axios';
 export default {
     data () {
         return {
-            token: undefined
+            token: undefined,
+            username:"",
+            first_name:"",
+            last_name:"",
+            email:"",
         }
     },
     created () {
@@ -52,6 +56,7 @@ export default {
             })
             .then((response) => {
                 console.log(response.data)
+                
             })
             .catch((error) => {
                 console.error(error)
