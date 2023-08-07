@@ -78,6 +78,7 @@
           alert('Please fix the errors before submitting.');
         } else {
           console.log('Form data:', this.form);
+          
         }
       }
     }
