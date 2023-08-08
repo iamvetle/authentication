@@ -94,7 +94,6 @@ export default {
         if (! await this.v$.$validate()) {
             console.log("Wrong form data:")
         } else {
-            console.log("Form data:")
 
             axios.post(this.url, this.form)
             .then((response) => {
@@ -103,7 +102,18 @@ export default {
             .catch((error) => {
               console.error("Unsuccessfull. Response: ", error)
             })
-        }
+
+            this.form.first_name = ""
+            this.form.last_name = ""
+            this.form.email = ""
+            this.form.phone = ""
+            this.form.password = ""
+            this.form.confirmPassword = ""
+        
+            this.v$.$reset()
+
+            this.$router.push('/login')
+          }
     }
   }
 }

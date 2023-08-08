@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
+
 class CustomUserManager(BaseUserManager): # Custom manager to handle my custom user model
     def create_user(self, email, first_name, last_name, password, phone=None): # The fields that 'can' be included
         if not email:
@@ -18,13 +19,12 @@ class CustomUserManager(BaseUserManager): # Custom manager to handle my custom u
         return user
     
     def create_superuser(self, email, first_name, last_name, password, phone=None):
-        user = self.create_user(email, first_name, last_name, password, phone) # Calls the function above
+        user = self.create_user(email, first_name, last_name, password, phone) # Calls 'create_user' function
         user.is_admin = True
         user.save(using=self._db)
         return user
 
-# Replaces the built-in User model. It becomes the "User" model for my projects.
-
+# Replaces the built-in User model.
 class CustomUser(AbstractBaseUser): # My own user model
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30)
@@ -36,7 +36,7 @@ class CustomUser(AbstractBaseUser): # My own user model
     objects = CustomUserManager() # Replacing the default user manager
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name'] # The requirements when doing 'createsuperuser'
 
     def __str__(self):
         return self.email
@@ -45,16 +45,19 @@ class CustomUser(AbstractBaseUser): # My own user model
     def is_staff(self):
         return self.is_admin
     
-    def has_module_perms(self, app_label):
-        return self.is_admin  # Or a more complex check depending on your needs
+    def has_module_perms(self, app_label): # Required (for admin panel)
+        return self.is_admin 
     
-    def has_perm(self, perm, obj=None):
-        return self.is_admin  # Or a more complex check depending on your needs
+    def has_perm(self, perm, obj=None): # Required (for admin panel)
+        return self.is_admin
     
 
     
-    # AUTH_USER_MODEL = something | replaces Djangos built in model with my own
+    # AUTH_USER_MODEL = api.CustomUser | replaces Djangos built-in User model with my own
 
-    # USERNAME_FIELD and REQUIRED_FIELDS: These are class attributes in the CustomUser model that Django's authentication framework uses to know certain things about your user model. USERNAME_FIELD tells Django which field is used as the "username". In this case, it's the email field, meaning users will authenticate with their email address. REQUIRED_FIELDS is a list of the names of the model fields that will be prompted for when creating a user via the createsuperuser management command.
+    # USERNAME_FIELD, tells Django which field is used as the "username". In this case, it's the email field, 
+    # meaning users will authenticate with their email address.
+ 
+    # REQUIRED_FIELDS is a list of the names of the model fields that will be prompted for when creating a user via the createsuperuser management command.
 
-    # From get_user_model() import
+    # From django.contrib.auth.models import get_user_model()
