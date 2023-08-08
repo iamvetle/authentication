@@ -36,7 +36,7 @@ class CustomUser(AbstractBaseUser): # My own user model
     objects = CustomUserManager() # Replacing the default user manager
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
         return self.email

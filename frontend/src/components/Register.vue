@@ -2,46 +2,46 @@
     <div>
       <form @submit.prevent="submitForm">
         <div>
-          <label for="first_name">First Name:</label>
-          <input class="border" v-model="first_name" id="first_name"/>
-          <div v-if="v$.first_name.$error">
+          <label for="form.first_name">First Name:</label>
+          <input class="border" v-model="form.first_name" id="first_name"/>
+          <div v-if="v$.form.first_name.$error">
             First name is required.
           </div>
         </div>
   
         <div>
-          <label for="last_name">Last Name:</label>
-          <input class="border" v-model="last_name" id="last_name" />
-          <div v-if="v$.last_name.$error">
+          <label for="form.last_name">Last Name:</label>
+          <input class="border" v-model="form.last_name" id="last_name" />
+          <div v-if="v$.form.last_name.$error">
             Last name is required.
           </div>
         </div>
   
         <div>
-          <label for="email">Email:</label>
-          <input class="border" v-model="email" id="email" type="email" />
-          <div v-if="v$.email.$error">
+          <label for="form.email">Email:</label>
+          <input class="border" v-model="form.email" id="email" type="email" />
+          <div v-if="v$.form.email.$error">
             Please enter a valid email address.
           </div>
         </div>
 
         <div>
-            <label for="phone">Phone:</label>
-            <input class="border" v-model="phone" id="phone" />
+            <label for="form.phone">Phone number:</label>
+            <input class="border" v-model="form.phone" id="phone" />
         </div>
   
         <div>
-          <label for="password">Password:</label>
-          <input class="border" v-model="password" id="password" type="password" />
-          <div v-if="v$.password.$error">
+          <label for="form.password">Password:</label>
+          <input class="border" v-model="form.password" id="password" type="password" />
+          <div v-if="v$.form.password.$error">
             Password must be at least 6 characters long.
           </div>
         </div>
 
         <div>
-        <label for="confirmPassword">Confirm Password:</label>
-        <input class="border" v-model="confirmPassword" id="confirmPassword" type="password" />
-        <div class="text-red-500" v-if="v$.confirmPassword.$error">
+        <label for="form.confirmPassword">Confirm Password:</label>
+        <input class="border" v-model="form.confirmPassword" id="confirmPassword" type="password" />
+        <div class="text-red-500" v-if="v$.form.confirmPassword.$error">
           The passwords do not match.
         </div>
       </div>
@@ -55,6 +55,7 @@
 
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, sameAs, minLength } from '@vuelidate/validators' 
+import axios from 'axios'
 
 export default {
   setup () {
@@ -64,6 +65,8 @@ export default {
     },    
     data() {
         return {
+          url:"http://localhost:8888/api/user/register/",
+          form: {
             first_name:"",
             last_name:"",
             email:"",
@@ -71,16 +74,19 @@ export default {
             password:"",
             confirmPassword:"",
         }
+        }
   },
   validations () {
     return {
+      form: {
         first_name:{ required, $autoDirty: true },
         last_name:{ required, $autoDirty: true },
         email: { required, email, $autoDirty: true  },
-        phone: { }, 
+        phone: {}, 
         password:{ required, minLength: minLength(6), $autoDirty: true },
-        confirmPassword: {sameAsPassword: sameAs(this.password), $autoDirty: true },
+        confirmPassword: {sameAsPassword: sameAs(this.form.password), $autoDirty: true },
       }
+    }
   },
   methods: {
     async submitForm() {
@@ -89,6 +95,14 @@ export default {
             console.log("Wrong form data:")
         } else {
             console.log("Form data:")
+
+            axios.post(this.url, this.form)
+            .then((response) => {
+              console.log("Successfull. Response: ", response.data)
+            })
+            .catch((error) => {
+              console.error("Unsuccessfull. Response: ", error)
+            })
         }
     }
   }

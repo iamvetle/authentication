@@ -1,9 +1,11 @@
-from django.shortcuts import render
 from .serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from django.views import View
+
+from django.db import IntegrityError
+from .models import CustomUser
+from rest_framework import status
 
 
 # Create your views here.
@@ -19,14 +21,6 @@ class CurrentUserView(APIView): # Function
 
 
 # With IsAuthenticated permission, only requests with valid authentication tokens will be allowed to access this endpoint. If the token is missing or invalid, a 401 Unauthorized response will be returned.
-
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.db import IntegrityError
-import json
-from .models import CustomUser
-from rest_framework import status
 
 class RegisterUserView(APIView):
     def post(self, request, *args, **kwargs):
