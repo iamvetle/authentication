@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 class CustomUserManager(BaseUserManager): # Custom manager to handle my custom user model
-    def create_user(self, email, first_name, last_name, phone, password): # The fields that 'can' be included
+    def create_user(self, email, first_name, last_name, password, phone=None): # The fields that 'can' be included
         if not email:
             raise ValueError('The Email field must be set')
         if not password:
@@ -17,8 +17,8 @@ class CustomUserManager(BaseUserManager): # Custom manager to handle my custom u
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, email, first_name, last_name, phone, password):
-        user = self.create_user(email, first_name, last_name, phone, password) # Calls the function above
+    def create_superuser(self, email, first_name, last_name, password, phone=None):
+        user = self.create_user(email, first_name, last_name, password, phone) # Calls the function above
         user.is_admin = True
         user.save(using=self._db)
         return user
@@ -44,6 +44,14 @@ class CustomUser(AbstractBaseUser): # My own user model
     @property
     def is_staff(self):
         return self.is_admin
+    
+    def has_module_perms(self, app_label):
+        return self.is_admin  # Or a more complex check depending on your needs
+    
+    def has_perm(self, perm, obj=None):
+        return self.is_admin  # Or a more complex check depending on your needs
+    
+
     
     # AUTH_USER_MODEL = something | replaces Djangos built in model with my own
 
