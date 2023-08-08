@@ -13,6 +13,9 @@
       
       <p class="mt-5 text-red-700" v-show="loginerror">Invalid credentials</p>
       <p class="mt-5 text-green-700" v-show="loginsucess">Login successfull</p>
+
+      <p class="mt-5">No account? Click her to register for a new account</p>
+      <span class="bg-slate-200 p-1"><router-link to="/register">Register</router-link></span>
     </div>
     
     </template>
