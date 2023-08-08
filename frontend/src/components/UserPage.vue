@@ -1,22 +1,19 @@
 <!-- This is only going to be rendered if a user is logged in -->
 
 <template>
-<div v-if="token !== null" class="container mx-auto"> <!-- User content-->
+<div v-if="token !== null" class="container w-3/12 mx-auto"> <!-- Has account: User content-->
     <div class="absolute p-1 top-5 left-8 bg-blue-300 rounded-sm ">
         <router-link to="/logout">logout</router-link>
     </div>
-    <h1 class="mt-14 text-3xl text-center">Hello </h1>
-    <p class="mt-6 text-center text-lg">Information about you</p>
-    <p class="py-2 text-center">First name: {{ first_name }}</p>
-    <p class="py-2 text-center">Last name: {{ last_name }}</p>
-    <p class="py-2 text-center">username: {{ username }}</p>
-    <p class="py-2 text-center">email: {{ email }}</p>
-    <p class="py-2 text-center">***: and so on</p>
-
+    <h1 class="mt-14 mb-6 text-3xl">Hello {{ first_name }} </h1>
+    <p class="py-2 "><span class="font-bold">First name:</span> {{ first_name }}</p>
+    <p class="py-2 "><span class="font-bold">Last name:</span> {{ last_name }}</p>
+    <p class="py-2 "><span class="font-bold">Email:</span> {{ email }}</p>
+    <p class="py-2 "><span class="font-bold">Phone number:</span> {{ phone }}</p>
 
 </div>
 
-<div v-else class="container mx-auto">
+<div v-else class="container mx-auto"> <!-- No account -->
     <h1 class="text-center py-5 text-3xl">Cool site</h1>
     <h2 class="text-center mt-7 text-lg clear-both">You have to have an account to be a enter this website.</h2>
     <button class="block mx-auto mt-5 bg-slate-500 p-2 rounded-sm">
@@ -39,10 +36,10 @@ export default {
     data () {
         return {
             token: undefined,
-            username:"",
+            email:"",
             first_name:"",
             last_name:"",
-            email:"",
+            phone: "",
         }
     },
     created () {
@@ -57,7 +54,10 @@ export default {
             })
             .then((response) => {
                 console.log(response.data)
-                
+                this.email = response.data.email
+                this.first_name = response.data.first_name
+                this.last_name = response.data.last_name
+                this.phone = response.data.phone
             })
             .catch((error) => {
                 console.error(error)
