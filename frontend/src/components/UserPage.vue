@@ -1,7 +1,7 @@
 <!-- This is only going to be rendered if a user is logged in -->
 
 <template>
-<div v-if="typeof token !== 'undefined'" class="container mx-auto"> <!-- User content-->
+<div v-if="token !== null" class="container mx-auto"> <!-- User content-->
     <div class="absolute p-1 top-5 left-8 bg-blue-300 rounded-sm ">
         <router-link to="/logout">logout</router-link>
     </div>
@@ -47,7 +47,8 @@ export default {
     },
     created () {
         this.token = localStorage.getItem("token")
-        if (typeof this.token !== 'undefined') {  // DOES have a token
+        console.log("Token: ", this.token)
+        if (this.token !== null) {  // DOES have a token
 
             axios.get("http://localhost:8888/api/user/", {
                 headers: {
